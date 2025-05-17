@@ -39,7 +39,7 @@ app.get('/check-image', async (req, res) => {
   try {
     const hash = req.query.hash;
     const result = await cloudinary.search
-      .expression(`metadata.hash:${hash} AND folder:dashboard`)
+      .expression(`metadata.hash=${hash} AND folder:dashboard`)
       .execute();
       
     res.json({ exists: result.resources.length > 0 });
