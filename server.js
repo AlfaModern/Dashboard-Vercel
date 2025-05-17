@@ -9,9 +9,7 @@ cloudinary.config({
 });
 
 const app = express();
-app.use(cors({
-  origin: 'https://YOUR_HOSTINGER_DOMAIN.com' // ⚠️ غيّر هذا لاحقًا
-}));
+app.use(cors());
 app.use(express.json());
 
 // Routes
