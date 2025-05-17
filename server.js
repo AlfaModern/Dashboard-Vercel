@@ -26,14 +26,38 @@ app.get('/list-images', async (req, res) => {
   }
 });
 
+// app.delete('/delete-image', async (req, res) => {
+//   try {
+//     const result = await cloudinary.uploader.destroy(req.body.publicId);
+//     res.json({ success: result.result === 'ok' });
+//   } catch (error) {
+//     res.status(500).json({ success: false, error: error.message });
+//   }
+// });
+// نقطة نهاية جديدة للتحقق من الوجود
+app.get('/check-image', async (req, res) => {
+  try {
+    const filename = req.query.name;
+    const result = await cloudinary.search
+      .expression(`filename:${filename} AND folder:your_folder`)
+      .execute();
+    
+    res.json({ exists: result.resources.length > 0 });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// نقطة نهاية الحذف المعدلة
 app.delete('/delete-image', async (req, res) => {
   try {
-    const result = await cloudinary.uploader.destroy(req.body.publicId);
+    const result = await cloudinary.uploader.destroy(req.body.publicId, {
+      invalidate: true // حذف النسخة المخبأة
+    });
     res.json({ success: result.result === 'ok' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Backend running on port ${PORT}`));
