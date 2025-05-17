@@ -37,11 +37,11 @@ app.get('/list-images', async (req, res) => {
 // نقطة نهاية جديدة للتحقق من الوجود
 app.get('/check-image', async (req, res) => {
   try {
-    const filename = req.query.name;
+    const hash = req.query.hash;
     const result = await cloudinary.search
-      .expression(`filename:${filename} AND folder:your_folder`)
+      .expression(`metadata.hash:${hash} AND folder:dashboard`)
       .execute();
-    
+      
     res.json({ exists: result.resources.length > 0 });
   } catch (error) {
     res.status(500).json({ error: error.message });
